@@ -2,19 +2,22 @@ import React from 'react';
 import MyHeader from './component/MyHeader';
 import MyNavi from './component/MyNavi';
 import MyIndex from './component/MyIndex';
-import MyFooter from './component/MyFooter';
+import {
+    BrowserRouter as Router,
+} from 'react-router-dom';
 
 const App = () => {
     
         return(
-            <div>
-                <MyHeader/>
-                <MyNavi/>
-                <MyIndex/>
-            </div>
+            <Router>
+                <div>
+                    <MyHeader/>
+                    <MyNavi/>
+                    <MyIndex/>
+                </div>
+            </Router>
         );
-    
-    
+        
 }
 
 export default App;

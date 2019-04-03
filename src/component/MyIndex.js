@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import MySideMenu from './MySideMenu';
-
+import MyContent from './MyContent';
+import MyHistory from './MyHistory';
+import MyLogin from './MyLogin';
 import {
-    BrowserRouter as Router,
-    Route
+    Route,
 } from 'react-router-dom';
 
 /*  ***************************
@@ -23,7 +24,7 @@ class MyIndex extends Component {
     handleEvent(event){
         console.log("MyIdex parents was called");
         console.log(event.target.name)
-        if(event.target.name == 'mySiadeMunuButton'){
+        if(event.target.name === 'mySiadeMunuButton'){
            
         }
     }
@@ -32,7 +33,11 @@ class MyIndex extends Component {
         return(
             <div className="container-fluid">
                 <div className="row">
-                    <MySideMenu appEventHandler={this.handleEvent}/>
+                        <MySideMenu appEventHandler={this.handleEvent}/>
+                        <Route path='/' component={MyContent} exact/>
+                        <Route path='/dashboard' component={MyContent} exact/>
+                        <Route path='/history' component={MyHistory} exact/>
+                        <Route path='/login' component={MyLogin} exact/>
                 </div>
             </div>
         );
