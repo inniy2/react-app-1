@@ -10,40 +10,26 @@ class App extends Component {
         
         constructor(){
             super();
-            this.state = {
-                isLoggin: false,
-                show: false,
-                isLoginModalOpened: false
-            };
-            this.handleOpenLoginModal = this.handleOpenLoginModal.bind(this);
-            this.handleCloseLoginModal = this.handleCloseLoginModal.bind(this);
-            this.handleLogin = this.handleLogin.bind(this);
-            this.componentDidMount = this.componentDidMount.bind(this);
-            this.handleLogout = this.handleLogout.bind(this);
+            this.state = {}
         };
 
-        handleOpenLoginModal(){
-            this.setState({show : true })
-        }
-
-        handleCloseLoginModal(){
-            this.setState({show : false  })
-        }
-
-        handleLogin(event){
-            // if you are a user
-            this.setState({isLoggin : true, show : false })
-           
-        }
-        
-        componentDidUpdate(){
-            console.log("componentDidUpdate")
-            
-        }
+       
 
         componentDidMount(){
+            // console.log("componentDidMount")
 
-            console.log("componentDidMount")
+            var myLocalStorage = window.localStorage;
+
+            myLocalStorage.clear();
+
+            myLocalStorage.setItem('userLocalStorageId','userLocalStorageId-5')
+
+            var mySessionStorage = window.sessionStorage;
+            mySessionStorage.setItem('userSessionStorageId', 'userSessionStorageId-5')
+
+            // console.log(myLocalStorage.getItem('userLocalStorageId'))
+            // console.log(mySessionStorage.getItem('userSessionStorageId'))
+           
             //setTimeout(()=>this.setState({isLoggin : false, show : true }),3000)
 
             // TO-DO Render loading and if user login failes 
@@ -54,22 +40,13 @@ class App extends Component {
        
 
 
-        handleLogout(event){
-            this.setState({isLoggin : false, show : false })
-        }
 
         render(){
             return(
                 <Router>
                     <div>
                         <MyHeader/>
-                        <MyNavi 
-                            show={this.state.show} 
-                            isLoggin={this.state.isLoggin}
-                            openLoginModal={this.handleOpenLoginModal}
-                            closeLoginModal={this.handleCloseLoginModal}
-                            loginAction={this.handleLogin} 
-                            logoutAction={this.handleLogout}/>
+                        <MyNavi/>
                         <MyIndex/>
                     </div>
                 </Router>
