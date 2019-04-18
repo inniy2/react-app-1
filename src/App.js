@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MyHeader from './component/MyHeader';
 import MyNavi from './component/MyNavi';
 import MyIndex from './component/MyIndex';
+<<<<<<< HEAD
 import {
     BrowserRouter as Router,
 } from 'react-router-dom';
@@ -54,6 +55,18 @@ class App extends Component {
         };
         
 
+=======
+import MyFooter from './component/MyFooter';
+
+const App = () => {
+    return(
+        <div>
+            <MyHeader/>
+            <MyNavi/>
+            <MyIndex/>
+        </div>
+    );
+>>>>>>> parent of d02ed9d... Button props and router added!
 }
 
 export default App;

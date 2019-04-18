@@ -1,15 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MySideMenu from './MySideMenu';
 import MyContent from './MyContent';
+<<<<<<< HEAD
 import MyHistory from './MyHistory';
 import MyLogin from './MyLogin';
 import {
     Route,
 } from 'react-router-dom';
+=======
+>>>>>>> parent of d02ed9d... Button props and router added!
 
 /*  ***************************
     This is the Below top
 *************************** */ 
+<<<<<<< HEAD
 class MyIndex extends Component {
     constructor(props){
         super(props);
@@ -39,9 +43,17 @@ class MyIndex extends Component {
                         <Route path='/history' component={MyHistory} exact/>
                         <Route path='/login' component={MyLogin} exact/>
                 </div>
+=======
+const MyIndex = () => {
+    return(
+        <div className="container-fluid">
+            <div className="row">
+                <MySideMenu/>
+                <MyContent/>
+>>>>>>> parent of d02ed9d... Button props and router added!
             </div>
-        );
-    }
+        </div>
+    );
 }
 
 export default MyIndex 
