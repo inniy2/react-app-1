@@ -42,7 +42,7 @@ const LoginModal = ({
             <Button name="closeButton" variant="secondary" onClick={actionModal}>
             Close
             </Button>
-            <Button name="submitButton" type='submit' variant="primary" className="btn btn-primary" 
+            <Button name="logInSubmitButton" type='submit' variant="primary" className="btn btn-primary" 
                 onClick={actionValueChange}
             >
                 Login

@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const MyTable = () => {
+const MyTable = ({ actionAddAlterModal }) => {
     return (
         <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 ">
@@ -8,7 +9,11 @@ const MyTable = () => {
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group mr-2">
                     </div>
-                    <button type="button" className="btn btn-big btn-primary" data-toggle="modal" data-target="#addAlterSchedule">ADD</button>  
+                    <button type="button" className="btn btn-big btn-primary" data-toggle="modal" data-target="#addAlterSchedule"
+                        onClick={actionAddAlterModal}
+                    > 
+                        ADD
+                    </button>
                 </div>
             </div>
             <div className="table-responsive">
@@ -53,5 +58,10 @@ const MyTable = () => {
 
     );
 }
+MyTable.propTypes = {
+    actionAddAlterModal: PropTypes.func.isRequired
+}
+
+
 
 export default MyTable

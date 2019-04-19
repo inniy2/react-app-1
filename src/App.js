@@ -5,6 +5,7 @@ import LeftNav from './component/LeftNav';
 import DashboardPage from './component/DashboardPage';
 import HistoryPage from './component/HistoryPage';
 import LoginModal from './component/LoginModal';
+import AddAlterTableModal from './component/AddAlterTableModal';
 import {
     BrowserRouter as Router,
     Route,
@@ -16,45 +17,76 @@ class App extends Component {
 
     state = {
         isLogin: false,
-        loginMoDalShow: false,
+        isLoginModalShow: false,
+        isAddAlterMoDalShow: false,
         userEmail: "",
         userPassword: "",
     };
 
 
     actionModal = () => {
-
-        this.state.isLogin?
+    
+        if (this.state.isLogin){
             // If user click log out botton
             this.setState(prevState => ({
                 isLogin: !prevState.isLogin
             }))
-        :
+            
+        }else {
             // First rendering
             // If user click log in botton
             this.setState(prevState => ({
-                loginMoDalShow: !prevState.loginMoDalShow
+                isLoginModalShow: !prevState.isLoginModalShow
             }))
+        }
+        
+        
     };
+
+    actionAddAlterModal = () => {
+        
+        if(this.state.isLogin){
+            // if log in status then show add alter table modal
+            this.setState(prevState => ({
+                isAddAlterMoDalShow: !prevState.isAddAlterMoDalShow
+            }))
+        }else{
+            // if use is not logged in show alert
+            alert("You need to login first")
+        }
+ 
+    }
 
     actionValueChange = event => {
         const { name, value } = event.target;
 
-        name === 'submitButton'?
+        if(name === 'logInSubmitButton') {
             // click login submit
-
-            // TO-DO time out callback
+            // TO-DO Later call api
+            setTimeout(()=> {
+                console.log("login callbackup after 3 sec")
+                this.setState({
+                    isLogin: true,
+                    isLoginModalShow: false
+                })
+            }, 3000);
             
-            this.setState({
-                isLogin: true,
-                loginMoDalShow: false
-            })
-        :
+        } else if (name === 'addAlterTableSubmitButton'){
+            // click add alter table  submit
+            // TO-DO Later call api
+            setTimeout(()=> {
+                console.log("add alter table  callbackup after 3 sec")
+                this.setState({
+                    isAddAlterMoDalShow: false
+                })
+            }, 3000);
+
+        }else {
             // email, password
             this.setState({
                 [ name ]: value
             })
-        
+        }
         
         
     };
@@ -74,7 +106,7 @@ class App extends Component {
             // whenever email, password types
             // Not login status
             <LoginModal 
-                isShow={this.state.loginMoDalShow} 
+                isShow={this.state.isLoginModalShow} 
                 actionModal={this.actionModal}
                 userEmail={this.state.userEmail}
                 userPassword={this.state.userPassword}
@@ -82,9 +114,18 @@ class App extends Component {
             />
     };
         
+
+    renderAddAlterModal = () => {
+        return <AddAlterTableModal 
+            isShow={this.state.isAddAlterMoDalShow} 
+            actionModal={this.actionAddAlterModal} 
+            actionValueChange={this.actionValueChange}
+        />
+    }
     
 
     render(){
+        // console.log("isAddAlterMoDalShow : ", this.state.isAddAlterMoDalShow)
         return(
             <div>
                 <Router>
@@ -110,10 +151,11 @@ class App extends Component {
                                 </li>
                             </LeftNav>
                             <main  role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
-                                <Route path='/' component={DashboardPage} exact/>
-                                <Route path='/dashboard' component={DashboardPage} exact/>
-                                <Route path='/history' component={HistoryPage} exact/>
+                                <Route path='/'          render={(props) => <DashboardPage {...props} actionAddAlterModal={this.actionAddAlterModal}/>}  exact/>
+                                <Route path='/dashboard' render={(props) => <DashboardPage {...props} actionAddAlterModal={this.actionAddAlterModal}/>}  exact/>
+                                <Route path='/history' component={HistoryPage} actionAddAlterModal={this.actionAddAlterModal} exact/>
                             </main>
+                            {this.renderAddAlterModal()}
                         </div>
                     </div>
                 </Router>
