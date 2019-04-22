@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import TopNav from './component/TopNav';
 import LeftNav from './component/LeftNav';
 import DashboardPage from './component/DashboardPage';
-import HistoryPage from './component/HistoryPage';
+import AlterHistoryPage from './component/AlterHistoryPage';
 import LoginModal from './component/LoginModal';
 import AddAlterTableModal from './component/AddAlterTableModal';
 import {
@@ -11,6 +11,8 @@ import {
     Route,
     NavLink
 } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 
 
 class App extends Component {
@@ -19,8 +21,49 @@ class App extends Component {
         isLogin: false,
         isLoginModalShow: false,
         isAddAlterMoDalShow: false,
+        isAlertShow: false,
         userEmail: "",
         userPassword: "",
+        tableDatas: [
+            {
+                alterTransactionNo: 1,
+                alterExcuteDate: 'N/A',
+                alterExcuteHour: 'N/A',
+                alterShardName: 'N/A',
+                alterDatabaseName: 'N/A',
+                alterTableName: 'N/A',
+                alterTableSize: 'N/A',
+                alterTableRows: 'N/A',
+                alterETA: 'N/A',
+                alterRegistrationDate: 'N/A',
+                alterStatus: 'N/A',
+                alterRequistor: 'N/A'
+            }
+        ],
+        graghOption: {
+            title:{
+                text: "Alter - per day"
+            },
+            axisX: {
+                valueFormatString: "MMM-DD",
+                interval:1,
+                intervalType: "day"
+              },
+            data: [
+                {
+                    type: "line",
+            
+                    dataPoints: [
+                        { x: new Date(2019, 0, 1), y: 0 },
+                        { x: new Date(2019, 0, 2), y: 0 },
+                        { x: new Date(2019, 0, 3), y: 0 },
+                        { x: new Date(2019, 0, 4), y: 0 },
+                        { x: new Date(2019, 0, 5), y: 0 },
+                        { x: new Date(2019, 0, 6), y: 0 },
+                        { x: new Date(2019, 0, 7), y: 0 }
+                    ]
+            }]
+        }
     };
 
 
@@ -52,9 +95,18 @@ class App extends Component {
             }))
         }else{
             // if use is not logged in show alert
-            alert("You need to login first")
+            // alert("You need to login first")
+            this.setState(prevState => ({
+                isAlertShow: !prevState.isAlertShow
+            }))
         }
  
+    }
+
+    actionAlert = () => {
+        this.setState(prevState => ({
+            isAlertShow: !prevState.isAlertShow
+        }))
     }
 
     actionValueChange = event => {
@@ -91,6 +143,13 @@ class App extends Component {
         
     };
 
+
+    actionNav = event => {
+        const { name, value } = event.target;
+        console.log(name)
+    }
+
+
     renderLoginModal = () => {
         return this.state.isLogin?
             // While login status 
@@ -123,11 +182,69 @@ class App extends Component {
         />
     }
     
+    renderAlert = () => {
+        return (
+            <>
+                <Alert show={this.state.isAlertShow} variant="success">
+                <Alert.Heading>How's it going?!</Alert.Heading>
+                <p>
+                    Please log in before you make any changes.<br></br>
+                    Thank you.
+                </p>
+                <hr />
+                <div className="d-flex justify-content-end">
+                    <Button onClick={this.actionAlert} variant="outline-success">
+                        Close
+                    </Button>
+                </div>
+                </Alert>
+            </>
+        )   
+    }
+
+    componentDidMount(){
+        // TO-DO Later call api for get current schedule for alter
+        /*
+        this.setState({
+            tableDatas: [
+                {
+                    alterTransactionNo: 1,
+                    alterExcuteDate: '15-08-2019',
+                    alterExcuteHour: '03',
+                    alterShardName: 'ORDER-EU',
+                    alterDatabaseName: 'taxify_compony',
+                    alterTableName: 'order',
+                    alterTableSize: '141G',
+                    alterTableRows: '125,987,938 rows',
+                    alterETA: '10H',
+                    alterRegistrationDate: '20-07-2019',
+                    alterStatus: 'Registerd',
+                    alterRequistor: 'Sangsun'
+                },
+                {
+                    alterTransactionNo: 2,
+                    alterExcuteDate: '07-08-2019',
+                    alterExcuteHour: '04',
+                    alterShardName: 'ORDER-EU',
+                    alterDatabaseName: 'taxify_compony',
+                    alterTableName: 'order',
+                    alterTableSize: '141G',
+                    alterTableRows: '125,987,938 rows',
+                    alterETA: '10H',
+                    alterRegistrationDate: '21-07-2019',
+                    alterStatus: 'Registerd',
+                    alterRequistor: 'Sangsun'
+                }
+            ]
+        })
+        */
+    }
+
 
     render(){
-        // console.log("isAddAlterMoDalShow : ", this.state.isAddAlterMoDalShow)
         return(
             <div>
+                {this.renderAlert()}
                 <Router>
                     <TopNav>
                         <button name="loginButton" className="btn btn-big btn-primary" onClick={this.actionModal} >{this.state.isLogin? 'Log out':'Log in' }</button>
@@ -137,28 +254,39 @@ class App extends Component {
                         <div className="row">
                             <LeftNav>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to='/dashboard'>
+                                    <NavLink name='dashboard' className="nav-link active" to='/dashboard' onClick={this.actionNav}>
                                         <span data-feather="home"></span>
                                         Dash Board 
                                         <span className="sr-only">(current)</span>
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" to='/history'>
+                                    <NavLink name='alterHistory' className="nav-link" to='/history' onClick={this.actionNav}>
                                         <span data-feather="file"></span>
                                         Alter History
                                     </NavLink>
                                 </li>
                             </LeftNav>
                             <main  role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
-                                <Route path='/'          render={(props) => <DashboardPage {...props} actionAddAlterModal={this.actionAddAlterModal}/>}  exact/>
-                                <Route path='/dashboard' render={(props) => <DashboardPage {...props} actionAddAlterModal={this.actionAddAlterModal}/>}  exact/>
-                                <Route path='/history' component={HistoryPage} actionAddAlterModal={this.actionAddAlterModal} exact/>
+                                <Route path='/'          render={(props) => <DashboardPage {...props} 
+                                    actionAddAlterModal={this.actionAddAlterModal}
+                                    tableDatas={this.state.tableDatas}
+                                    graghOption={this.state.graghOption}
+                                />}  exact/>
+                                <Route path='/dashboard' render={(props) => <DashboardPage {...props} 
+                                    actionAddAlterModal={this.actionAddAlterModal}
+                                    tableDatas={this.state.tableDatas}
+                                    graghOption={this.state.graghOption}
+                                />}  exact/>
+                                <Route path='/history' render={(props) => <AlterHistoryPage {...props}
+                                    tableDatas={this.state.tableDatas}
+                                />}   exact/>
                             </main>
                             {this.renderAddAlterModal()}
                         </div>
                     </div>
                 </Router>
+
             </div>
         );
     }

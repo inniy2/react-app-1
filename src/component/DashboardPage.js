@@ -1,18 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MyCanvas from './MyCanvas';
-import MyTable from './MyTable';
+import AlterInfoGraph from './AlterInfoGraph';
+import AlterInfoTables from './AlterInfoTables';
 
-const DashBoardPage = ({ actionAddAlterModal }) => {
+const DashboardPage = ({ actionAddAlterModal, tableDatas, graghOption }) => {
+    
     return(
         <div>
-            <MyCanvas/>
-            <MyTable actionAddAlterModal={actionAddAlterModal} />
+            <AlterInfoGraph graghOption={graghOption} />
+            <AlterInfoTables 
+                actionAddAlterModal={actionAddAlterModal} 
+                tableDatas={tableDatas}
+             />
         </div>
     );
 }
-DashBoardPage.propTypes = {
-    actionAddAlterModal: PropTypes.func.isRequired
+DashboardPage.propTypes = {
+    actionAddAlterModal: PropTypes.func.isRequired,
+    tableDatas: PropTypes.array.isRequired,
+    graghOption: PropTypes.object.isRequired
 }
 
-export default DashBoardPage 
+export default DashboardPage 

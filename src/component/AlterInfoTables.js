@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const MyTable = ({ actionAddAlterModal, tableDatas }) => {
+const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
     return (
         <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 ">
@@ -51,7 +51,7 @@ const MyTable = ({ actionAddAlterModal, tableDatas }) => {
                                 <td>{item.alterRegistrationDate}</td>
                                 <td>{item.alterStatus}</td>
                                 <td>{item.alterRequistor}</td>
-                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule">Edit</button></td>
+                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={actionAddAlterModal}>Edit</button></td>
                             </tr>;
                         }
                     )} 
@@ -62,7 +62,7 @@ const MyTable = ({ actionAddAlterModal, tableDatas }) => {
 
     );
 }
-MyTable.propTypes = {
+AlterInfoTables.propTypes = {
     actionAddAlterModal: PropTypes.func.isRequired,
     tableDatas: PropTypes.array.isRequired
 }
@@ -71,4 +71,4 @@ MyTable.propTypes = {
 
 
 
-export default MyTable
+export default AlterInfoTables
