@@ -24,6 +24,7 @@ class App extends Component {
         isAlertShow: false,
         userEmail: "",
         userPassword: "",
+        shardNameSelect: "default",
         tableDatas: [
             {
                 alterTransactionNo: 1,
@@ -134,7 +135,7 @@ class App extends Component {
             }, 3000);
 
         }else {
-            // email, password
+            // email, password, shardName
             this.setState({
                 [ name ]: value
             })
@@ -179,6 +180,7 @@ class App extends Component {
             isShow={this.state.isAddAlterMoDalShow} 
             actionModal={this.actionAddAlterModal} 
             actionValueChange={this.actionValueChange}
+            shardNameSelect={this.state.shardNameSelect}
         />
     }
     
@@ -242,6 +244,7 @@ class App extends Component {
 
 
     render(){
+        console.log(this.state.shardNameSelect)
         return(
             <div>
                 {this.renderAlert()}

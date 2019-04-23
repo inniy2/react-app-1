@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+
 const AddAlterTableModal = ({ 
     isShow, 
     actionModal, 
-    actionValueChange}) =>
+    actionValueChange,
+    shardNameSelect}) =>
     <Modal show={isShow} onHide={actionModal}>
         <Modal.Header closeButton>
             <Modal.Title>ADD ALTER</Modal.Title>
@@ -16,10 +18,9 @@ const AddAlterTableModal = ({
                 <form>
                     <div className="form-group">
                         <label htmlFor="inputShardName">Shard Name</label>
-                        <select id="inputShardName" className="form-control">
-                            <option>Choose...</option>
-                            <option>ORDER-EU</option>
-                            <option>ORDER_AU</option>
+                        <select id="inputShardName" className="form-control"  name="shardNameSelect" value={shardNameSelect} onChange={actionValueChange}>
+                            <option value="default">Choose...</option>
+                            <option value="order-eu">ORDER-EU</option>
                         </select>
                     </div>
                     <div className="form-group">
@@ -63,5 +64,7 @@ AddAlterTableModal.propTypes = {
     actionModal: PropTypes.func.isRequired,
     actionValueChange: PropTypes.func.isRequired,
 }
+
+
 
 export default AddAlterTableModal
