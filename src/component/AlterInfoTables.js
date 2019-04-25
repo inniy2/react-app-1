@@ -11,7 +11,7 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                     <div className="btn-group mr-2">
                     </div>
                     <button type="button" className="btn btn-big btn-primary" data-toggle="modal" data-target="#addAlterSchedule"
-                        onClick={actionAddAlterModal}
+                        onClick={() => {actionAddAlterModal(0)}}
                     > 
                         ADD
                     </button>
@@ -51,7 +51,7 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                                 <td>{item.alterRegistrationDate}</td>
                                 <td>{item.alterStatus}</td>
                                 <td>{item.alterRequistor}</td>
-                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={actionAddAlterModal}>Edit</button></td>
+                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={() => {actionAddAlterModal(item.alterTransactionNo)}}>Edit</button></td>
                             </tr>;
                         }
                     )} 

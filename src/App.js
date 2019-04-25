@@ -24,15 +24,22 @@ class App extends Component {
         isAlertShow: false,
         userEmail: "",
         userPassword: "",
-        shardNameSelect: "default",
+        modalAlterTransactionNo: 0,
+        modalAlterShardName: "default",
+        modalAlterDatabaseName: "",
+        modalAlterTableName: "",
+        modalAlterSyntax: "",
+        modalAlterDate: "",
+        modalAlterHour: "",
         tableDatas: [
             {
                 alterTransactionNo: 1,
                 alterExcuteDate: 'N/A',
                 alterExcuteHour: 'N/A',
-                alterShardName: 'N/A',
-                alterDatabaseName: 'N/A',
-                alterTableName: 'N/A',
+                alterShardName: 'order-euaaa',
+                alterDatabaseName: 'taxiy_company',
+                alterTableName: 'order',
+                alterSyntax: 'N/A',
                 alterTableSize: 'N/A',
                 alterTableRows: 'N/A',
                 alterETA: 'N/A',
@@ -68,7 +75,7 @@ class App extends Component {
     };
 
 
-    actionModal = () => {
+    actionLoginModal = () => {
     
         if (this.state.isLogin){
             // If user click log out botton
@@ -87,13 +94,39 @@ class App extends Component {
         
     };
 
-    actionAddAlterModal = () => {
-        
+    actionAddAlterModal = alterTransactionNo  => {
+        console.log(alterTransactionNo)
+        // if log in status then show add alter table modal
         if(this.state.isLogin){
-            // if log in status then show add alter table modal
+            
             this.setState(prevState => ({
-                isAddAlterMoDalShow: !prevState.isAddAlterMoDalShow
+                isAddAlterMoDalShow: !prevState.isAddAlterMoDalShow,
             }))
+
+             // this will define click ADD or click Edit
+            if (alterTransactionNo === 0){
+                this.setState({
+                    modalAlterTransactionNo: alterTransactionNo
+                })    
+            }else{
+
+                // alterTransactionNo is not array number, it is data!!!
+                // Get index number of array 
+                let tableDatasIndex = this.state.tableDatas.findIndex((element)=>{return element.alterTransactionNo === alterTransactionNo})
+
+                this.setState({
+                    modalAlterTransactionNo: this.state.tableDatas[tableDatasIndex].alterTransactionNo,
+                    modalAlterShardName: this.state.tableDatas[tableDatasIndex].alterShardName,
+                    modalAlterDatabaseName: this.state.tableDatas[tableDatasIndex].alterDatabaseName,
+                    modalAlterTableName: this.state.tableDatas[tableDatasIndex].alterTableName,
+                    modalAlterSyntax: this.state.tableDatas[tableDatasIndex].alterSyntax,
+                    modalAlterDate: this.state.tableDatas[tableDatasIndex].alterExcuteDate,
+                    modalAlterHour: this.state.tableDatas[tableDatasIndex].alterExcuteHour,
+                })
+                
+            }
+            
+    
         }else{
             // if use is not logged in show alert
             // alert("You need to login first")
@@ -135,7 +168,7 @@ class App extends Component {
             }, 3000);
 
         }else {
-            // email, password, shardName
+            // email, password, shardName ....
             this.setState({
                 [ name ]: value
             })
@@ -156,7 +189,7 @@ class App extends Component {
             // While login status 
             <LoginModal 
                 isShow={false} 
-                actionModal={this.actionModal}
+                actionLoginModal={this.actionLoginModal}
                 userEmail={this.state.userEmail}
                 userPassword={this.state.userPassword}
                 actionValueChange={this.actionValueChange}
@@ -167,7 +200,7 @@ class App extends Component {
             // Not login status
             <LoginModal 
                 isShow={this.state.isLoginModalShow} 
-                actionModal={this.actionModal}
+                actionLoginModal={this.actionLoginModal}
                 userEmail={this.state.userEmail}
                 userPassword={this.state.userPassword}
                 actionValueChange={this.actionValueChange}
@@ -176,12 +209,19 @@ class App extends Component {
         
 
     renderAddAlterModal = () => {
+
         return <AddAlterTableModal 
-            isShow={this.state.isAddAlterMoDalShow} 
-            actionModal={this.actionAddAlterModal} 
-            actionValueChange={this.actionValueChange}
-            shardNameSelect={this.state.shardNameSelect}
-        />
+                    isShow={this.state.isAddAlterMoDalShow} 
+                    actionAddAlterModal={this.actionAddAlterModal} 
+                    actionValueChange={this.actionValueChange}
+                    modalAlterTransactionNo={this.state.modalAlterTransactionNo}
+                    modalAlterShardName={this.state.modalAlterShardName}
+                    modalAlterDatabaseName={this.state.modalAlterDatabaseName}
+                    modalAlterTableName={this.state.modalAlterTableName}
+                    modalAlterSyntax={this.state.modalAlterSyntax}
+                    modalAlterDate={this.state.modalAlterDate}
+                    modalAlterHour={this.state.modalAlterHour} 
+               />
     }
     
     renderAlert = () => {
@@ -244,13 +284,13 @@ class App extends Component {
 
 
     render(){
-        console.log(this.state.shardNameSelect)
+        // console.log(this.state.shardNameSelect)
         return(
             <div>
                 {this.renderAlert()}
                 <Router>
                     <TopNav>
-                        <button name="loginButton" className="btn btn-big btn-primary" onClick={this.actionModal} >{this.state.isLogin? 'Log out':'Log in' }</button>
+                        <button name="loginButton" className="btn btn-big btn-primary" onClick={this.actionLoginModal} >{this.state.isLogin? 'Log out':'Log in' }</button>
                         {this.renderLoginModal()}
                     </TopNav>
                     <div className="container-fluid" >

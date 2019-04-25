@@ -5,11 +5,11 @@ import Modal from 'react-bootstrap/Modal';
 
 const LoginModal = ({ 
     isShow, 
-    actionModal, 
+    actionLoginModal, 
     actionValueChange,
     userEmail,
     userPassword }) => 
-        <Modal show={isShow} onHide={actionModal}>
+        <Modal show={isShow} onHide={actionLoginModal}>
         <Modal.Header closeButton>
             <Modal.Title>Log In</Modal.Title>
         </Modal.Header>
@@ -19,7 +19,8 @@ const LoginModal = ({
                     <form>
                         <div className="form-group">
                             <label htmlFor="exampleInputEmail1">Email address</label>
-                            <input type="email" name="userEmail" className="form-control"  id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+                            <input type="email" className="form-control"  id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"
+                                name="userEmail"
                                 value={userEmail}
                                 onChange={actionValueChange}
                             />
@@ -28,7 +29,8 @@ const LoginModal = ({
                         </div>
                         <div className="form-group">
                             <label htmlFor="exampleInputPassword1">Password</label>
-                            <input type="password" name="userPassword" className="form-control" id="exampleInputPassword1" placeholder="Password"
+                            <input type="password"  className="form-control" id="exampleInputPassword1" placeholder="Password"
+                                name="userPassword"
                                 value={userPassword}
                                 onChange={actionValueChange}
                             />
@@ -39,7 +41,7 @@ const LoginModal = ({
             </div>
         </Modal.Body>
         <Modal.Footer>
-            <Button name="closeButton" variant="secondary" onClick={actionModal}>
+            <Button name="closeButton" variant="secondary" onClick={actionLoginModal}>
             Close
             </Button>
             <Button name="logInSubmitButton" type='submit' variant="primary" className="btn btn-primary" 
@@ -51,7 +53,7 @@ const LoginModal = ({
         </Modal>;
 LoginModal.propTypes = {
     isShow: PropTypes.bool.isRequired,
-    actionModal: PropTypes.func.isRequired,
+    actionLoginModal: PropTypes.func.isRequired,
     actionValueChange: PropTypes.func.isRequired,
     userEmail: PropTypes.string.isRequired,
     userPassword: PropTypes.string.isRequired
