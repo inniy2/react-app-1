@@ -18,6 +18,7 @@ import Alert from 'react-bootstrap/Alert';
 class App extends Component {
 
     state = {
+        apiBaseUrl: "http://test-bae-server1.testdb:8080/api",
         isLogin: false,
         isLoginModalShow: false,
         isAddAlterMoDalShow: false,
@@ -32,6 +33,7 @@ class App extends Component {
         modalAlterDate: "",
         modalAlterHour: "",
         tableDatas: [
+            /*
             {
                 alterTransactionNo: 1,
                 alterExcuteDate: 'N/A',
@@ -47,6 +49,7 @@ class App extends Component {
                 alterStatus: 'N/A',
                 alterRequistor: 'N/A'
             }
+            */
         ],
         graghOption: {
             title:{
@@ -280,11 +283,27 @@ class App extends Component {
             ]
         })
         */
+
+        var xhr = new XMLHttpRequest()
+
+        xhr.open('POST', 'http://test-bae-server1.testdb:8080/api/ghost/findAll')
+        xhr.setRequestHeader('Content-Type', 'application/json')
+
+        xhr.send(JSON.stringify({ }))
+
+        xhr.addEventListener('load', () => {
+            console.log("addEventListener message : " + xhr.responseText)
+            this.setState({
+                tableDatas: JSON.parse(xhr.responseText)
+            })
+        })
+
     }
 
 
     render(){
-        // console.log(this.state.shardNameSelect)
+        console.log(this.state.error)
+        console.log(this.state.tableDatas)
         return(
             <div>
                 {this.renderAlert()}

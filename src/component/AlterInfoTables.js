@@ -38,6 +38,10 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                 </thead>
                 <tbody>
                     {tableDatas.map(item => {
+
+                            var progressStatus = "Unknown";
+
+                            /*
                             return <tr key={item.alterTransactionNo}>
                                 <td>{item.alterTransactionNo}</td>
                                 <td>{item.alterExcuteDate}</td>
@@ -52,6 +56,29 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                                 <td>{item.alterStatus}</td>
                                 <td>{item.alterRequistor}</td>
                                 <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={() => {actionAddAlterModal(item.alterTransactionNo)}}>Edit</button></td>
+                            </tr>;
+                            */
+                           
+                           if(item.progressStatus == 2){
+                                progressStatus = "Completed"
+                           }else if(item.progressStatus == 1){
+                                progressStatus = "In progress"
+                           }
+
+                           return <tr key={item.orderId}>
+                                 <td>{item.orderId+1}</td>
+                                 <td>{item.createTimestamp}</td>
+                                 <td>{item.updateTimestamp}</td>
+                                 <td>{item.clusterName}</td>
+                                 <td>{item.tableSchema}</td>
+                                 <td>{item.tableName}</td>
+                                 <td>N/A</td>
+                                 <td>N/A</td>
+                                 <td>N/A</td>
+                                 <td>{item.createTimestamp}</td>
+                                 <td>{progressStatus}</td>
+                                 <td>{item.registerEmail}</td>
+                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={() => {actionAddAlterModal(item.orderId)}}>Edit</button></td>
                             </tr>;
                         }
                     )} 
