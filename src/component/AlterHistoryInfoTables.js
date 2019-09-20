@@ -2,19 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const MyTable = ({ actionAddAlterModal, tableDatas }) => {
+const AlterInfoTables = ({ tableDatas }) => {
     return (
         <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 ">
-                <h2>Alter schedule</h2>
+                <h2>Alter History</h2>
                 <div className="btn-toolbar mb-2 mb-md-0">
                     <div className="btn-group mr-2">
                     </div>
-                    <button type="button" className="btn btn-big btn-primary" data-toggle="modal" data-target="#addAlterSchedule"
-                        onClick={actionAddAlterModal}
-                    > 
-                        ADD
-                    </button>
                 </div>
             </div>
             <div className="table-responsive">
@@ -33,7 +28,6 @@ const MyTable = ({ actionAddAlterModal, tableDatas }) => {
                         <th>Registration Date</th>
                         <th>Status</th>
                         <th>Updator</th>
-                        <th>Edit</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -51,7 +45,6 @@ const MyTable = ({ actionAddAlterModal, tableDatas }) => {
                                 <td>{item.alterRegistrationDate}</td>
                                 <td>{item.alterStatus}</td>
                                 <td>{item.alterRequistor}</td>
-                                <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule">Edit</button></td>
                             </tr>;
                         }
                     )} 
@@ -62,8 +55,7 @@ const MyTable = ({ actionAddAlterModal, tableDatas }) => {
 
     );
 }
-MyTable.propTypes = {
-    actionAddAlterModal: PropTypes.func.isRequired,
+AlterInfoTables.propTypes = {
     tableDatas: PropTypes.array.isRequired
 }
 
@@ -71,4 +63,4 @@ MyTable.propTypes = {
 
 
 
-export default MyTable
+export default AlterInfoTables

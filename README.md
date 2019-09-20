@@ -66,3 +66,13 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+### Additional npm pakage  
+
+`npm  install --save react-bootstrap bootstrap`  
+`npm  install --save react-router-dom`  
+
+Download library from here: https://canvasjs.com/download-html5-charting-graphing-library/  
+Installation guide here: https://canvasjs.com/docs/charts/intro/installation/  
+Unzip it. Copy canvasjs.react.js & canvasjs.min.js to src directory  
