@@ -152,6 +152,8 @@ class App extends Component {
         if(name === 'logInSubmitButton') {
             // click login submit
             // TO-DO Later call api
+
+            /*
             setTimeout(()=> {
                 console.log("login callbackup after 3 sec")
                 this.setState({
@@ -159,6 +161,40 @@ class App extends Component {
                     isLoginModalShow: false
                 })
             }, 3000);
+            */
+
+            var xhr = new XMLHttpRequest()
+
+            xhr.open('POST', 'http://test-bae-server1.testdb:8080/api/login/login')
+            xhr.setRequestHeader('Content-Type', 'application/json')
+
+            xhr.send(JSON.stringify({ 
+                "razielUser" : this.state.userEmail,
+                "razielPassword" : this.state.userPassword
+            }))
+
+            xhr.addEventListener('load', () => {
+                console.log("addEventListener message : " + xhr.responseText)
+
+                var returnOjb = JSON.parse(xhr.responseText)
+                
+                if(returnOjb.status == 1){
+                    this.setState({
+                        isLogin: true,
+                        isLoginModalShow: false
+                    })
+                }else{
+                    this.setState({
+                        isLogin: false,
+                        isLoginModalShow: true
+                    })
+                }
+                
+            })
+
+            
+
+
             
         } else if (name === 'addAlterTableSubmitButton'){
             // click add alter table  submit
