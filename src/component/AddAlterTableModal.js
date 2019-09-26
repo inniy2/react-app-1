@@ -31,6 +31,7 @@ const AddAlterTableModal = ({
                             onChange={actionValueChange}
                         >
                                 <option value="default">Choose...</option>
+                                <option value="test-cluster">TEST-CLUSTER</option>
                                 <option value="order-eu">ORDER-EU</option>
                                 <option value="order-na">ORDER-NA</option>
                                 <option value="order-au">ORDER-AU</option>

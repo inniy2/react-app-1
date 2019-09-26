@@ -4,6 +4,7 @@ import TopNav from './component/TopNav';
 import LeftNav from './component/LeftNav';
 import DashboardPage from './component/DashboardPage';
 import AlterHistoryPage from './component/AlterHistoryPage';
+import AlterValidationPage from './component/AlterValidationPage';
 import LoginModal from './component/LoginModal';
 import AddAlterTableModal from './component/AddAlterTableModal';
 import {
@@ -25,13 +26,14 @@ class App extends Component {
         isAlertShow: false,
         userEmail: "",
         userPassword: "",
-        modalAlterTransactionNo: 0,
+        modalAlterTransactionNo: -1,
         modalAlterShardName: "default",
         modalAlterDatabaseName: "",
         modalAlterTableName: "",
         modalAlterSyntax: "",
         modalAlterDate: "",
         modalAlterHour: "",
+        ansibleData:[],
         tableDatas: [
             /*
             {
@@ -49,6 +51,15 @@ class App extends Component {
                 alterStatus: 'N/A',
                 alterRequistor: 'N/A'
             }
+            <td>{item.orderId+1}</td>
+            <td>{item.createTimestamp}</td>
+            <td>{item.updateTimestamp}</td>
+            <td>{item.clusterName}</td>
+            <td>{item.tableSchema}</td>
+            <td>{item.tableName}</td>
+            <td>{item.createTimestamp}</td>
+            <td>{progressStatus}</td>
+            <td>{item.registerEmail}</td>
             */
         ],
         graghOption: {
@@ -74,8 +85,18 @@ class App extends Component {
                         { x: new Date(2019, 0, 7), y: 0 }
                     ]
             }]
-        }
+        },
+        ansibleData: [],
+        dryrunData: []
     };
+
+
+    actionConnectService = controllerUrl => {
+
+        
+
+    };
+
 
 
     actionLoginModal = () => {
@@ -97,8 +118,10 @@ class App extends Component {
         
     };
 
+
     actionAddAlterModal = alterTransactionNo  => {
         console.log(alterTransactionNo)
+        console.log(this.state.tableDatas)
         // if log in status then show add alter table modal
         if(this.state.isLogin){
             
@@ -107,7 +130,7 @@ class App extends Component {
             }))
 
              // this will define click ADD or click Edit
-            if (alterTransactionNo === 0){
+            if (alterTransactionNo === -1){
                 this.setState({
                     modalAlterTransactionNo: alterTransactionNo
                 })    
@@ -115,14 +138,16 @@ class App extends Component {
 
                 // alterTransactionNo is not array number, it is data!!!
                 // Get index number of array 
-                let tableDatasIndex = this.state.tableDatas.findIndex((element)=>{return element.alterTransactionNo === alterTransactionNo})
+                let tableDatasIndex = this.state.tableDatas.findIndex((element)=>{return element.orderId === alterTransactionNo })
+
+                console.log(tableDatasIndex)
 
                 this.setState({
-                    modalAlterTransactionNo: this.state.tableDatas[tableDatasIndex].alterTransactionNo,
-                    modalAlterShardName: this.state.tableDatas[tableDatasIndex].alterShardName,
-                    modalAlterDatabaseName: this.state.tableDatas[tableDatasIndex].alterDatabaseName,
-                    modalAlterTableName: this.state.tableDatas[tableDatasIndex].alterTableName,
-                    modalAlterSyntax: this.state.tableDatas[tableDatasIndex].alterSyntax,
+                    modalAlterTransactionNo: this.state.tableDatas[tableDatasIndex].orderId,
+                    modalAlterShardName: this.state.tableDatas[tableDatasIndex].clusterName,
+                    modalAlterDatabaseName: this.state.tableDatas[tableDatasIndex].tableSchema,
+                    modalAlterTableName: this.state.tableDatas[tableDatasIndex].tableName,
+                    // modalAlterSyntax: this.state.tableDatas[tableDatasIndex].alterSyntax,
                     modalAlterDate: this.state.tableDatas[tableDatasIndex].alterExcuteDate,
                     modalAlterHour: this.state.tableDatas[tableDatasIndex].alterExcuteHour,
                 })
@@ -146,8 +171,13 @@ class App extends Component {
         }))
     }
 
+
+
+
     actionValueChange = event => {
         const { name, value } = event.target;
+
+      
 
         if(name === 'logInSubmitButton') {
             // click login submit
@@ -163,22 +193,23 @@ class App extends Component {
             }, 3000);
             */
 
-            var xhr = new XMLHttpRequest()
+           var xhr = new XMLHttpRequest()
 
-            xhr.open('POST', 'http://test-bae-server1.testdb:8080/api/login/login')
-            xhr.setRequestHeader('Content-Type', 'application/json')
+           var returnObj
 
-            xhr.send(JSON.stringify({ 
-                "razielUser" : this.state.userEmail,
-                "razielPassword" : this.state.userPassword
-            }))
+           xhr.open('POST', this.state.apiBaseUrl+'/login/login')
+           xhr.setRequestHeader('Content-Type', 'application/json')
+   
+           xhr.send(JSON.stringify({ 
+               "razielUser" : this.state.userEmail,
+               "razielPassword" : this.state.userPassword
+           }))
+   
+           xhr.addEventListener('load', () => {
+               console.log("addEventListener message : " + xhr.responseText)
+               returnObj = JSON.parse(xhr.responseText)
 
-            xhr.addEventListener('load', () => {
-                console.log("addEventListener message : " + xhr.responseText)
-
-                var returnOjb = JSON.parse(xhr.responseText)
-                
-                if(returnOjb.status == 1){
+               if(returnObj.status === 1){
                     this.setState({
                         isLogin: true,
                         isLoginModalShow: false
@@ -189,8 +220,8 @@ class App extends Component {
                         isLoginModalShow: true
                     })
                 }
-                
-            })
+
+           })
 
             
 
@@ -199,15 +230,117 @@ class App extends Component {
         } else if (name === 'addAlterTableSubmitButton'){
             // click add alter table  submit
             // TO-DO Later call api
+            
             setTimeout(()=> {
                 console.log("add alter table  callbackup after 3 sec")
                 this.setState({
                     isAddAlterMoDalShow: false
                 })
             }, 3000);
+            
+            
+
+        }else if (name === 'DryRunSubmitButton'){
+            // click add alter table  submit
+            // TO-DO Later call api
+            
+            var ansible = new XMLHttpRequest()
+ 
+            // Ansible
+            
+            ansible.open('POST', this.state.apiBaseUrl+'/ansible/find')
+            ansible.setRequestHeader('Content-Type', 'application/json')
+    
+            ansible.send(JSON.stringify({ 
+                "tableName" : this.state.modalAlterTableName,
+                "tableSchema" : this.state.modalAlterDatabaseName,
+                "clusterName" : this.state.modalAlterShardName,
+                "alterStatement" : this.state.modalAlterSyntax.split(','),
+                "registerEmail" : this.state.userEmail,
+            }))
+    
+            ansible.addEventListener('load', () => {
+                console.log("addEventListener message : " + ansible.responseText)
+                var returnObj = JSON.parse(ansible.responseText)
+                
+                if(ansible.status === 200){
+                    this.setState({
+                        ansibleData: returnObj
+                    })
+                }
+                
+            })
+            
+
+
+            // Dry run
+            
+            var dryrun = new XMLHttpRequest()
+
+            dryrun.open('POST', this.state.apiBaseUrl+'/ghost/dryrun')
+            dryrun.setRequestHeader('Content-Type', 'application/json')
+    
+            dryrun.send(JSON.stringify({ 
+                "tableName" : this.state.modalAlterTableName,
+                "tableSchema" : this.state.modalAlterDatabaseName,
+                "clusterName" : this.state.modalAlterShardName,
+                "alterStatement" : this.state.modalAlterSyntax.split(','),
+                "registerEmail" : this.state.userEmail,
+            }))
+    
+            dryrun.addEventListener('load', () => {
+                console.log("addEventListener message : " + dryrun.responseText)
+                var returnObj = JSON.parse(dryrun.responseText)
+                
+                if(dryrun.status === 200){
+                    this.setState({
+                        dryrunData: returnObj.outputStrList
+                    })
+                }
+                
+            })
+            
+
+        }else if (name === 'ExecuteSubmitButton'){
+
+            // Execute Alter
+            
+            var executeAlter = new XMLHttpRequest()
+
+            executeAlter.open('POST', this.state.apiBaseUrl+'/ghost/execute')
+            executeAlter.setRequestHeader('Content-Type', 'application/json')
+    
+            executeAlter.send(JSON.stringify({ 
+                "tableName" : this.state.modalAlterTableName,
+                "tableSchema" : this.state.modalAlterDatabaseName,
+                "clusterName" : this.state.modalAlterShardName,
+                "alterStatement" : this.state.modalAlterSyntax.split(','),
+                "registerEmail" : this.state.userEmail,
+            }))
+            
+            executeAlter.addEventListener('load', () => {
+                
+
+                /*
+                console.log("addEventListener message : " + executeAlter.responseText)
+                var returnObj = JSON.parse(executeAlter.responseText)
+                
+                if(executeAlter.status === 200){
+                    console.log("executeAlter status : " + executeAlter.status)
+                }
+                */
+                
+            })
+
+            alert("Alter executed! Refresh the page.")
+
+            setTimeout(()=> {
+                window.location.replace("/dashboard");
+            }, 1000);
 
         }else {
             // email, password, shardName ....
+            
             this.setState({
                 [ name ]: value
             })
@@ -215,6 +348,9 @@ class App extends Component {
         
         
     };
+
+
+
 
 
     actionNav = event => {
@@ -283,6 +419,18 @@ class App extends Component {
         )   
     }
 
+    renderAlterExecute = actionValueChange => {
+        return <div className="form-row">
+                    <div className="form-group col-md-6">
+                    <Button name="ExecuteSubmitButton" type='button' variant="primary" className="btn btn-primary" 
+                        onClick={actionValueChange}
+                    >
+                        Execute
+                    </Button>
+                    </div>
+                </div>
+    }
+
     componentDidMount(){
         // TO-DO Later call api for get current schedule for alter
         /*
@@ -322,7 +470,7 @@ class App extends Component {
 
         var xhr = new XMLHttpRequest()
 
-        xhr.open('POST', 'http://test-bae-server1.testdb:8080/api/ghost/findAll')
+        xhr.open('POST', this.state.apiBaseUrl+'/ghost/findAll')
         xhr.setRequestHeader('Content-Type', 'application/json')
 
         xhr.send(JSON.stringify({ }))
@@ -338,8 +486,7 @@ class App extends Component {
 
 
     render(){
-        console.log(this.state.error)
-        console.log(this.state.tableDatas)
+
         return(
             <div>
                 {this.renderAlert()}
@@ -364,6 +511,12 @@ class App extends Component {
                                         Alter History
                                     </NavLink>
                                 </li>
+                                <li className="nav-item">
+                                    <NavLink name='alterValidation' className="nav-link" to='/validation' onClick={this.actionNav}>
+                                        <span data-feather="file"></span>
+                                        Alter Validation
+                                    </NavLink>
+                                </li>
                             </LeftNav>
                             <main  role="main" className="col-md-9 ml-sm-auto col-lg-10 px-4">
                                 <Route path='/'          render={(props) => <DashboardPage {...props} 
@@ -378,6 +531,12 @@ class App extends Component {
                                 />}  exact/>
                                 <Route path='/history' render={(props) => <AlterHistoryPage {...props}
                                     tableDatas={this.state.tableDatas}
+                                />}   exact/>
+                                <Route path='/validation' render={(props) => <AlterValidationPage {...props}
+                                    renderAlterExecute={this.renderAlterExecute}
+                                    ansibleData={this.state.ansibleData}
+                                    dryrunData={this.state.dryrunData} 
+                                    actionValueChange={this.actionValueChange}
                                 />}   exact/>
                             </main>
                             {this.renderAddAlterModal()}

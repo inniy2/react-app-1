@@ -40,6 +40,7 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                     {tableDatas.map(item => {
 
                             var progressStatus = "Unknown";
+                            var updatetime = item.updateTimestamp
 
                             /*
                             return <tr key={item.alterTransactionNo}>
@@ -59,16 +60,17 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                             </tr>;
                             */
                            
-                           if(item.progressStatus == 2){
+                           if(item.progressStatus === 2){
                                 progressStatus = "Completed"
-                           }else if(item.progressStatus == 1){
+                           }else if(item.progressStatus === 1){
                                 progressStatus = "In progress"
+                                updatetime = "N/A"
                            }
 
                            return <tr key={item.orderId}>
                                  <td>{item.orderId+1}</td>
                                  <td>{item.createTimestamp}</td>
-                                 <td>{item.updateTimestamp}</td>
+                                 <td>{updatetime}</td>
                                  <td>{item.clusterName}</td>
                                  <td>{item.tableSchema}</td>
                                  <td>{item.tableName}</td>
