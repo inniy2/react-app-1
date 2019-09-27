@@ -101,7 +101,7 @@ const AlterValidationInput = ({
                                 </Button>
                             </div>
                         </div>
-                        {renderAlterExecute(actionValueChange)}
+                        
                         
 
                     </form>   
@@ -145,6 +145,13 @@ const AlterValidationInput = ({
                     })}
                    
                 </div>
+
+                <div className="card-body">
+
+                    {renderAlterExecute(actionValueChange)}
+                   
+                </div>
+                
             </div>
 
 

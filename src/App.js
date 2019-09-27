@@ -24,6 +24,7 @@ class App extends Component {
         isLoginModalShow: false,
         isAddAlterMoDalShow: false,
         isAlertShow: false,
+        isDryRunClicked: false,
         userEmail: "",
         userPassword: "",
         modalAlterTransactionNo: -1,
@@ -265,7 +266,7 @@ class App extends Component {
             */
             
             if(this.state.isLogin){
-                
+
                 var ansible = new XMLHttpRequest()
  
                 // Ansible
@@ -316,7 +317,8 @@ class App extends Component {
                     
                     if(dryrun.status === 200){
                         this.setState({
-                            dryrunData: returnObj.outputStrList
+                            dryrunData: returnObj.outputStrList,
+                            isDryRunClicked: true
                         })
                     }
                     
@@ -471,15 +473,21 @@ class App extends Component {
 
 
     renderAlterExecute = actionValueChange => {
-        return <div className="form-row">
-                    <div className="form-group col-md-6">
-                    <Button name="ExecuteSubmitButton" type='button' variant="primary" className="btn btn-primary" 
-                        onClick={actionValueChange}
-                    >
-                        Execute
-                    </Button>
+
+        if(this.state.isDryRunClicked){
+            return <div className="form-row">
+                        <div className="form-group col-md-6">
+                        <Button name="ExecuteSubmitButton" type='button' variant="primary" className="btn btn-primary" 
+                            onClick={actionValueChange}
+                        >
+                            Execute
+                        </Button>
+                        </div>
                     </div>
-                </div>
+        }else{
+            return <div className="form-row"></div>
+        }
+
     };
 
 
