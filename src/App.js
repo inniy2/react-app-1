@@ -350,7 +350,7 @@ class App extends Component {
                 "tableSchema" : this.state.modalAlterDatabaseName,
                 "clusterName" : this.state.modalAlterShardName,
                 "alterStatement" : this.state.modalAlterSyntax.split(','),
-                "registerEmail" : this.state.userEmail,
+                "registerEmail" : this.state.userEmail
             }))
             
             executeAlter.addEventListener('load', () => {

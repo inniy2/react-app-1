@@ -22,13 +22,12 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th>Date</th>
-                        <th>Time</th>
+                        <th>Start</th>
+                        <th>End</th>
                         <th>Shard Name</th>
                         <th>Database Name</th>
                         <th>Table NAME</th>
-                        <th>Table Size (GB)</th>
-                        <th>Table Size (Rows)</th>
+                        
                         <th>ETA (H)</th>
                         <th>Registration Date</th>
                         <th>Status</th>
@@ -40,7 +39,11 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                     {tableDatas.map(item => {
 
                             var progressStatus = "Unknown";
-                            var updatetime = item.updateTimestamp
+                            var createtime = ((item.createTimestamp).replace('T',' ')).slice(0,19)
+                            var updatetime = ((item.updateTimestamp).replace('T',' ')).slice(0,19)
+
+                            var timestampSubstract = (new Date(item.updateTimestamp) - new Date(item.createTimestamp)) / 1000 / 60 / 60
+                            var etaValue =  Math.round(timestampSubstract * 10 ) /10 
 
                             /*
                             return <tr key={item.alterTransactionNo}>
@@ -58,6 +61,13 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                                 <td>{item.alterRequistor}</td>
                                 <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={() => {actionAddAlterModal(item.alterTransactionNo)}}>Edit</button></td>
                             </tr>;
+
+                            <th>Table Size (GB)</th>
+                            <th>Table Size (Rows)</th>
+                            
+                            <td>N/A</td>
+                            <td>N/A</td>
+
                             */
                            
                            if(item.progressStatus === 2){
@@ -65,19 +75,19 @@ const AlterInfoTables = ({ actionAddAlterModal, tableDatas }) => {
                            }else if(item.progressStatus === 1){
                                 progressStatus = "In progress"
                                 updatetime = "N/A"
+                                etaValue = "N/A"
                            }
 
                            return <tr key={item.orderId}>
                                  <td>{item.orderId+1}</td>
-                                 <td>{item.createTimestamp}</td>
+                                 <td>{createtime}</td>
                                  <td>{updatetime}</td>
                                  <td>{item.clusterName}</td>
                                  <td>{item.tableSchema}</td>
                                  <td>{item.tableName}</td>
-                                 <td>N/A</td>
-                                 <td>N/A</td>
-                                 <td>N/A</td>
-                                 <td>{item.createTimestamp}</td>
+
+                                 <td>{etaValue}</td>
+                                 <td>{createtime}</td>
                                  <td>{progressStatus}</td>
                                  <td>{item.registerEmail}</td>
                                 <td><button type="button" className="btn btn-sm btn-primary" data-toggle="modal" data-target="#addAlterSchedule" onClick={() => {actionAddAlterModal(item.orderId)}}>Edit</button></td>
