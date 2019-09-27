@@ -91,13 +91,6 @@ class App extends Component {
     };
 
 
-    actionConnectService = controllerUrl => {
-
-        
-
-    };
-
-
 
     actionLoginModal = () => {
     
@@ -120,6 +113,8 @@ class App extends Component {
         
         
     };
+
+
 
 
     actionAddAlterModal = alterTransactionNo  => {
@@ -166,21 +161,23 @@ class App extends Component {
             }))
         }
  
-    }
+    };
+
+
+
 
     actionAlert = () => {
         this.setState(prevState => ({
             isAlertShow: !prevState.isAlertShow
         }))
-    }
+    };
 
 
 
 
     actionValueChange = event => {
-        const { name, value } = event.target;
 
-      
+        const { name, value } = event.target;
 
         if(name === 'logInSubmitButton') {
             // click login submit
@@ -196,23 +193,24 @@ class App extends Component {
             }, 3000);
             */
 
-           var xhr = new XMLHttpRequest()
+            
+            var xhr = new XMLHttpRequest()
 
-           var returnObj
+            var returnObj
 
-           xhr.open('POST', this.state.apiBaseUrl+'/login/login')
-           xhr.setRequestHeader('Content-Type', 'application/json')
+            xhr.open('POST', this.state.apiBaseUrl+'/login/login')
+            xhr.setRequestHeader('Content-Type', 'application/json')
    
-           xhr.send(JSON.stringify({ 
+            xhr.send(JSON.stringify({ 
                "razielUser" : this.state.userEmail,
                "razielPassword" : this.state.userPassword
-           }))
+            }))
    
-           xhr.addEventListener('load', () => {
-               console.log("addEventListener message : " + xhr.responseText)
-               returnObj = JSON.parse(xhr.responseText)
+            xhr.addEventListener('load', () => {
+                console.log("addEventListener message : " + xhr.responseText)
+                returnObj = JSON.parse(xhr.responseText)
 
-               if(returnObj.status === 1){
+                if(returnObj.status === 1){
 
                     this.setState({
                         isLogin: true,
@@ -231,7 +229,7 @@ class App extends Component {
 
                 }
 
-           })
+            })
 
             
 
@@ -253,62 +251,87 @@ class App extends Component {
         }else if (name === 'DryRunSubmitButton'){
             // click add alter table  submit
             // TO-DO Later call api
+
+            /*
+            if(this.state.isLogin){
+
+            }else{
+                // if use is not logged in show alert
+                // alert("You need to login first")
+                this.setState(prevState => ({
+                isAlertShow: !prevState.isAlertShow
+                }))
+            }
+            */
             
-            var ansible = new XMLHttpRequest()
+            if(this.state.isLogin){
+                
+                var ansible = new XMLHttpRequest()
  
-            // Ansible
-            
-            ansible.open('POST', this.state.apiBaseUrl+'/ansible/find')
-            ansible.setRequestHeader('Content-Type', 'application/json')
-    
-            ansible.send(JSON.stringify({ 
-                "tableName" : this.state.modalAlterTableName,
-                "tableSchema" : this.state.modalAlterDatabaseName,
-                "clusterName" : this.state.modalAlterShardName,
-                "alterStatement" : this.state.modalAlterSyntax.split(','),
-                "registerEmail" : this.state.userEmail,
-            }))
-    
-            ansible.addEventListener('load', () => {
-                console.log("addEventListener message : " + ansible.responseText)
-                var returnObj = JSON.parse(ansible.responseText)
+                // Ansible
                 
-                if(ansible.status === 200){
-                    this.setState({
-                        ansibleData: returnObj
-                    })
-                }
+                ansible.open('POST', this.state.apiBaseUrl+'/ansible/find')
+                ansible.setRequestHeader('Content-Type', 'application/json')
+        
+                ansible.send(JSON.stringify({ 
+                    "tableName" : this.state.modalAlterTableName,
+                    "tableSchema" : this.state.modalAlterDatabaseName,
+                    "clusterName" : this.state.modalAlterShardName,
+                    "alterStatement" : this.state.modalAlterSyntax.split(','),
+                    "registerEmail" : this.state.userEmail,
+                }))
+        
+                ansible.addEventListener('load', () => {
+                    console.log("addEventListener message : " + ansible.responseText)
+                    var returnObj = JSON.parse(ansible.responseText)
+                    
+                    if(ansible.status === 200){
+                        this.setState({
+                            ansibleData: returnObj
+                        })
+                    }
+                    
+                })
                 
-            })
-            
+    
+    
+                // Dry run
+                
+                var dryrun = new XMLHttpRequest()
+    
+                dryrun.open('POST', this.state.apiBaseUrl+'/ghost/dryrun')
+                dryrun.setRequestHeader('Content-Type', 'application/json')
+        
+                dryrun.send(JSON.stringify({ 
+                    "tableName" : this.state.modalAlterTableName,
+                    "tableSchema" : this.state.modalAlterDatabaseName,
+                    "clusterName" : this.state.modalAlterShardName,
+                    "alterStatement" : this.state.modalAlterSyntax.split(','),
+                    "registerEmail" : this.state.userEmail,
+                }))
+        
+                dryrun.addEventListener('load', () => {
+                    console.log("addEventListener message : " + dryrun.responseText)
+                    var returnObj = JSON.parse(dryrun.responseText)
+                    
+                    if(dryrun.status === 200){
+                        this.setState({
+                            dryrunData: returnObj.outputStrList
+                        })
+                    }
+                    
+                })
+
+            }else{
+                // if use is not logged in show alert
+                // alert("You need to login first")
+                this.setState(prevState => ({
+                isAlertShow: !prevState.isAlertShow
+                }))
+            }
 
 
-            // Dry run
-            
-            var dryrun = new XMLHttpRequest()
 
-            dryrun.open('POST', this.state.apiBaseUrl+'/ghost/dryrun')
-            dryrun.setRequestHeader('Content-Type', 'application/json')
-    
-            dryrun.send(JSON.stringify({ 
-                "tableName" : this.state.modalAlterTableName,
-                "tableSchema" : this.state.modalAlterDatabaseName,
-                "clusterName" : this.state.modalAlterShardName,
-                "alterStatement" : this.state.modalAlterSyntax.split(','),
-                "registerEmail" : this.state.userEmail,
-            }))
-    
-            dryrun.addEventListener('load', () => {
-                console.log("addEventListener message : " + dryrun.responseText)
-                var returnObj = JSON.parse(dryrun.responseText)
-                
-                if(dryrun.status === 200){
-                    this.setState({
-                        dryrunData: returnObj.outputStrList
-                    })
-                }
-                
-            })
             
 
         }else if (name === 'ExecuteSubmitButton'){
@@ -348,9 +371,14 @@ class App extends Component {
                 window.location.replace("/dashboard");
             }, 1000);
 
+
+
+
+
+
+
         }else {
             // email, password, shardName ....
-            
             this.setState({
                 [ name ]: value
             })
@@ -366,7 +394,11 @@ class App extends Component {
     actionNav = event => {
         const { name, value } = event.target;
         console.log(name)
-    }
+    };
+
+
+
+
 
 
     renderLoginModal = () => {
@@ -393,6 +425,8 @@ class App extends Component {
     };
         
 
+
+
     renderAddAlterModal = () => {
 
         return <AddAlterTableModal 
@@ -407,8 +441,12 @@ class App extends Component {
                     modalAlterDate={this.state.modalAlterDate}
                     modalAlterHour={this.state.modalAlterHour} 
                />
-    }
+    };
     
+
+
+
+
     renderAlert = () => {
         return (
             <>
@@ -427,7 +465,10 @@ class App extends Component {
                 </Alert>
             </>
         )   
-    }
+    };
+
+
+
 
     renderAlterExecute = actionValueChange => {
         return <div className="form-row">
@@ -439,7 +480,11 @@ class App extends Component {
                     </Button>
                     </div>
                 </div>
-    }
+    };
+
+
+
+
 
     componentDidMount(){
         // TO-DO Later call api for get current schedule for alter
@@ -517,6 +562,9 @@ class App extends Component {
     }
 
 
+
+
+
     render(){
 
         return(
@@ -578,7 +626,7 @@ class App extends Component {
 
             </div>
         );
-    }
+    };
 
 }
 
