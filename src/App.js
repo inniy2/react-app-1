@@ -106,6 +106,8 @@ class App extends Component {
             this.setState(prevState => ({
                 isLogin: !prevState.isLogin
             }))
+
+            window.localStorage.clear()
             
         }else {
             // First rendering
@@ -113,6 +115,7 @@ class App extends Component {
             this.setState(prevState => ({
                 isLoginModalShow: !prevState.isLoginModalShow
             }))
+            
         }
         
         
@@ -210,15 +213,22 @@ class App extends Component {
                returnObj = JSON.parse(xhr.responseText)
 
                if(returnObj.status === 1){
+
                     this.setState({
                         isLogin: true,
                         isLoginModalShow: false
                     })
+
+                    var now = new Date().getTime()
+                    localStorage.setItem('loginTime', now)
+                    window.localStorage.setItem('loginUser', this.state.userEmail)
+
                 }else{
                     this.setState({
                         isLogin: false,
                         isLoginModalShow: true
                     })
+
                 }
 
            })
@@ -467,6 +477,28 @@ class App extends Component {
             ]
         })
         */
+
+        
+
+        var userName = window.localStorage.getItem('loginUser')
+
+        if(userName !== null){
+
+            console.log('stored userName : '+userName)
+
+            var now = new Date().getTime();
+            var loginTime = window.localStorage.getItem('loginTime')
+            
+            if( now - loginTime > 24 * 60 * 60 * 1000){
+                window.localStorage.clear();
+            }else{
+                this.setState(prevState => ({
+                    isLogin: true,
+                    userEmail: userName
+                }))
+            }
+
+        }
 
         var xhr = new XMLHttpRequest()
 
